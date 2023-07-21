@@ -1,4 +1,4 @@
-package com.jp319.zeroartfetcher;
+package com.jp319.zeroartfetcher.core.model;
 
 import java.util.List;
 

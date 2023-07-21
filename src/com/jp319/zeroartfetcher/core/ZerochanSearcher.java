@@ -1,8 +1,10 @@
-package com.jp319.zeroartfetcher;
+package com.jp319.zeroartfetcher.core;
 
 import com.google.gson.Gson;
 import com.jp319.zeroartfetcher.api.ZerochanResponseParser;
 import com.jp319.zeroartfetcher.config.ZeroArtFetcherConfig;
+import com.jp319.zeroartfetcher.core.model.ZerochanItem;
+import com.jp319.zeroartfetcher.core.model.ZerochanItems;
 
 import java.io.IOException;
 import java.net.URI;

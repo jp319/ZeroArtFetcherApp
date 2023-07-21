@@ -1,5 +1,8 @@
 package com.jp319.zeroartfetcher;
 
+import com.jp319.zeroartfetcher.core.ZerochanSearcher;
+import com.jp319.zeroartfetcher.core.model.ZerochanItem;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -18,7 +21,6 @@ public class Main {
                     ("> ");
             String filterStr = scanner.next();
             if (!idStr.equals("X")) {
-//                System.out.println("Image link: " + getImage(idStr));
                 System.out.println(getThumbnails("Genshin+impact", "strict"));
             } else {
                 break;

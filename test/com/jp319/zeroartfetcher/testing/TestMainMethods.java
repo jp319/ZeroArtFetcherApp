@@ -1,10 +1,7 @@
 package com.jp319.zeroartfetcher.testing;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.jp319.zeroartfetcher.ZerochanItem;
-import com.jp319.zeroartfetcher.ZerochanItems;
-import com.jp319.zeroartfetcher.ZerochanSearcher;
+import com.jp319.zeroartfetcher.core.model.ZerochanItem;
+import com.jp319.zeroartfetcher.core.ZerochanSearcher;
 
 import java.io.IOException;
 import java.util.List;
