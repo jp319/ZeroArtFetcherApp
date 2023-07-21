@@ -2,17 +2,12 @@ package com.jp319.zeroartfetcher;
 
 import java.util.List;
 
-/**
- * The type Items.
- */
 public class ZerochanItems {
-    private List<ZerochanItem> zerochanItems;
-    /**
-     * Gets items.
-     *
-     * @return the items
-     */
+    private List<ZerochanItem> items;
     public List<ZerochanItem> getItems() {
-        return zerochanItems;
+        return items;
+    }
+    public void setItems(List<ZerochanItem> items) {
+        this.items = items;
     }
 }
