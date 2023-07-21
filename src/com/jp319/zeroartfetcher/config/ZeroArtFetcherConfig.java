@@ -15,6 +15,9 @@ public class ZeroArtFetcherConfig {
     public String getUserAgentHeader() {
         return properties.getProperty("user.agent.header");
     }
+    public String getSavedImageDirectory() {
+        return properties.getProperty("saved.image.directory");
+    }
     private Properties loadPropertiesFromFile() {
         try (InputStream inputStream = ZeroArtFetcherConfig.class.getResourceAsStream("/config/config.properties")) {
             if (inputStream != null) {
