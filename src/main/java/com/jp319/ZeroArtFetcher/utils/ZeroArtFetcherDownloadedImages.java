@@ -1,6 +1,4 @@
-package com.jp319.zeroartfetcher.api;
-
-import com.jp319.zeroartfetcher.config.ZeroArtFetcherConfig;
+package com.jp319.ZeroArtFetcher.utils;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -10,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ZeroArtFetcherLocalImages {
+public class ZeroArtFetcherDownloadedImages {
     private final String imageDirectoryPath = new ZeroArtFetcherConfig().getSavedImageDirectory();
     private File[] getImageFiles() {
         File directory = new File(imageDirectoryPath);
@@ -30,7 +28,7 @@ public class ZeroArtFetcherLocalImages {
 
         List<String> relativeFilePaths = new ArrayList<>();
         for (File imageFile : imageFiles) {
-            String relativePath = getRelativePath(imageFile.getAbsolutePath());
+            String relativePath = getImageDirectoryPath() + getRelativePath(imageFile.getAbsolutePath());
             relativeFilePaths.add(relativePath);
         }
 
@@ -46,10 +44,10 @@ public class ZeroArtFetcherLocalImages {
         return imageDirectoryPath;
     }
 
-//    public static void main(String[] args) {
-//        ZeroArtFetcherLocalImages zeroArtFetcherLocalImages =
-//                new ZeroArtFetcherLocalImages();
-//        System.out.println(Arrays.toString(zeroArtFetcherLocalImages.getRelativeImageFilePaths()));
-//        System.out.println(zeroArtFetcherLocalImages.getImageDirectoryPath());
-//    }
+    public static void main(String[] args) {
+        ZeroArtFetcherDownloadedImages zeroArtFetcherDownloadedImages =
+                new ZeroArtFetcherDownloadedImages();
+        System.out.println(Arrays.toString(zeroArtFetcherDownloadedImages.getRelativeImageFilePaths()));
+        System.out.println(zeroArtFetcherDownloadedImages.getImageDirectoryPath());
+    }
 }

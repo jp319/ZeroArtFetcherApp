@@ -1,7 +1,9 @@
 package com.jp319.zeroartfetcher.testing;
 
-import com.jp319.zeroartfetcher.core.model.ZerochanItem;
-import com.jp319.zeroartfetcher.core.ZerochanSearcher;
+
+
+import com.jp319.ZeroArtFetcher.controllers.ZerochanSearcherOnline;
+import com.jp319.ZeroArtFetcher.models.ZerochanItem;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +27,9 @@ public class TestMainMethods {
         // Access the list of ZerochanItem objects
 //        List<ZerochanItem> items = zerochanItems.getItems();
         List<ZerochanItem> items =
-                new ZerochanSearcher("Genshin+Impact", "Strict")
+                new ZerochanSearcherOnline(
+                        "Genshin+Impact",
+                        "Strict")
                         .getThumbnails();
 
         // Now you can work with the individual ZerochanItem objects

@@ -1,10 +1,9 @@
-package com.jp319.zeroartfetcher.core;
+package com.jp319.ZeroArtFetcher.controllers;
 
 import com.google.gson.Gson;
-import com.jp319.zeroartfetcher.api.ZerochanResponseParser;
-import com.jp319.zeroartfetcher.config.ZeroArtFetcherConfig;
-import com.jp319.zeroartfetcher.core.model.ZerochanItem;
-import com.jp319.zeroartfetcher.core.model.ZerochanItems;
+import com.jp319.ZeroArtFetcher.models.ZerochanItem;
+import com.jp319.ZeroArtFetcher.models.ZerochanItems;
+import com.jp319.ZeroArtFetcher.utils.ZeroArtFetcherConfig;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,16 +12,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
-public class ZerochanSearcher {
+public class ZerochanSearcherOnline {
     private final ZeroArtFetcherConfig zeroArtFetcherConfig = new ZeroArtFetcherConfig();
-    private final String apiBaseUrl;
-    private final String userAgentHeader;
-    private final HttpClient httpClient;
-    private final Gson gson;
+    private String apiBaseUrl;
+    private String userAgentHeader;
+    private HttpClient httpClient;
+    private Gson gson;
     private final String id;
     private final String commaSeperatedTags;
     private final String andSeperatedFilters;
-    public ZerochanSearcher() {
+    public ZerochanSearcherOnline() {
         this.id = "none";
         this.commaSeperatedTags = "none";
         this.andSeperatedFilters = "none";
@@ -31,19 +30,19 @@ public class ZerochanSearcher {
         httpClient = HttpClient.newHttpClient();
         gson = new Gson();
     }
-    public ZerochanSearcher(String id) {
+    public ZerochanSearcherOnline(String id) {
+        this(id, "none", "none");
+    }
+    public ZerochanSearcherOnline(String commaSeperatedTags, String andSeperatedFilters) {
+        this("none", commaSeperatedTags, andSeperatedFilters);
+    }
+    private ZerochanSearcherOnline(String id, String commaSeperatedTags, String andSeperatedFilters) {
         this.id = id;
-        this.commaSeperatedTags = "none";
-        this.andSeperatedFilters = "none";
-        apiBaseUrl = loadApiBaseUrlFromConfig();
-        userAgentHeader = loadUserAgentHeaderFromConfig();
-        httpClient = HttpClient.newHttpClient();
-        gson = new Gson();
-    }
-    public ZerochanSearcher(String commaSeperatedTags, String andSeperatedFilters) {
-        this.id = "none";
         this.commaSeperatedTags = commaSeperatedTags;
         this.andSeperatedFilters = andSeperatedFilters;
+        initialize();
+    }
+    private  void initialize() {
         apiBaseUrl = loadApiBaseUrlFromConfig();
         userAgentHeader = loadUserAgentHeaderFromConfig();
         httpClient = HttpClient.newHttpClient();

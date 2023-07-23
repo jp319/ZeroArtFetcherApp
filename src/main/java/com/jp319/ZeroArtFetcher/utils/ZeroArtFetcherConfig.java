@@ -1,4 +1,4 @@
-package com.jp319.zeroartfetcher.config;
+package com.jp319.ZeroArtFetcher.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,7 @@ public class ZeroArtFetcherConfig {
         return properties.getProperty("saved.image.directory");
     }
     private Properties loadPropertiesFromFile() {
-        try (InputStream inputStream = ZeroArtFetcherConfig.class.getResourceAsStream("/config/config.properties")) {
+        try (InputStream inputStream = ZeroArtFetcherConfig.class.getResourceAsStream("/data/config.properties")) {
             if (inputStream != null) {
                 Properties properties = new Properties();
                 properties.load(inputStream);
