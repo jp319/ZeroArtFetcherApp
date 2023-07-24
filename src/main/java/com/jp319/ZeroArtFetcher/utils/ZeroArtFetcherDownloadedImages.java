@@ -20,7 +20,7 @@ public class ZeroArtFetcherDownloadedImages {
         Path relativePath = baseDirectoryPath.relativize(filePath);
         return relativePath.toString();
     }
-    public String[] getRelativeImageFilePaths() {
+    public String[] getImageFilePaths() {
         File[] imageFiles = getImageFiles();
         if (imageFiles == null) {
             return new String[0];
@@ -47,7 +47,7 @@ public class ZeroArtFetcherDownloadedImages {
     public static void main(String[] args) {
         ZeroArtFetcherDownloadedImages zeroArtFetcherDownloadedImages =
                 new ZeroArtFetcherDownloadedImages();
-        System.out.println(Arrays.toString(zeroArtFetcherDownloadedImages.getRelativeImageFilePaths()));
-        System.out.println(zeroArtFetcherDownloadedImages.getImageDirectoryPath());
+        System.out.println("fn Relative Image Path: "+Arrays.toString(zeroArtFetcherDownloadedImages.getImageFilePaths()));
+        System.out.println("fn Image Directory Path: "+zeroArtFetcherDownloadedImages.getImageDirectoryPath());
     }
 }

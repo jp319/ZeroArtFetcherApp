@@ -6,29 +6,33 @@ import com.jp319.ZeroArtFetcher.models.ZerochanItem;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
-        // Retrieving an individual image
-        System.out.println("Individual Image Retriever Test");
-         System.out.println("Image: " + getImage("3662015"));
-         System.out.println("Image: " + getImage("3661729"));
-        // Retrieving multiple images (Thumbnails)
-        String tags = "Genshin+Impact";
-        String filters = "Strict&p=2&l=200";
-        System.out.println("\nMultiple Image Retriever Test");
-        System.out.println(
-                "Search: " +
-                        "Tag(s) = "+tags+" & " +
-                        "Filter(s) = "+filters+"\n" +
-                getThumbnails(tags, filters) +
-                "=====================================");
-        tags = "Lumine,Flower";
-        filters = "Strict&p=2&l=200";
-        System.out.println(
-                "Search: " +
-                        "Tag(s) = "+tags+" & " +
-                        "Filter(s) = "+filters+"\n" +
-                        getThumbnails(tags, filters) +
-                        "=====================================");
+    public static void main(String[] args) throws IOException, InterruptedException {
+//        // Retrieving an individual image
+//        System.out.println("Individual Image Retriever Test");
+//         System.out.println("Image: " + getImage("3662015"));
+//         System.out.println("Image: " + getImage("3661729"));
+//        // Retrieving multiple images (Thumbnails)
+//        String tags = "Genshin+Impact";
+//        String filters = "Strict&p=2&l=200";
+//        System.out.println("\nMultiple Image Retriever Test");
+//        System.out.println(
+//                "Search: " +
+//                        "Tag(s) = "+tags+" & " +
+//                        "Filter(s) = "+filters+"\n" +
+//                getThumbnails(tags, filters) +
+//                "=====================================");
+//        tags = "Lumine,Flower";
+//        filters = "Strict&p=2&l=200";
+//        System.out.println(
+//                "Search: " +
+//                        "Tag(s) = "+tags+" & " +
+//                        "Filter(s) = "+filters+"\n" +
+//                        getThumbnails(tags, filters) +
+//                        "=====================================");
+        String[] thumbnails = new ZerochanSearcherOnline( "Lumine,Flower", "Strict&p=2&l=200").getThumbnails();
+        for (String thumbnail : thumbnails) {
+            System.out.println(thumbnail);
+        }
 
     }
     // Working
@@ -46,7 +50,7 @@ public class Main {
         StringBuilder thumbnails = new StringBuilder();
         int count = 1;
         try {
-            for (ZerochanItem thumbnail : zerochanSearcherOnline.getThumbnails()) {
+            for (ZerochanItem thumbnail : zerochanSearcherOnline.getItemListFromTagSearch()) {
                 thumbnails.append("Thumbnail (").append(count++).append("):");
                 thumbnails.append(thumbnail.getThumbnail()).append(",\n");
             }

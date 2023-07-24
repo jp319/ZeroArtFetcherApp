@@ -80,33 +80,35 @@ public class WrapLayout extends FlowLayout
     @Override
     public void layoutContainer(Container target) {
         super.layoutContainer(target);
+        if (target.getComponentCount() > 0) {
 
-        Component c = target.getComponent(0);
+            Component c = target.getComponent(0);
 
-        int lineStart = getVgap();
-        int lineHeight = lineStart + c.getSize().height;
+            int lineStart = getVgap();
+            int lineHeight = lineStart + c.getSize().height;
 
-        for (int i = 0; i < target.getComponentCount(); i++)
-        {
-            c = target.getComponent(i);
-
-            Point p = c.getLocation();
-            Dimension d = c.getSize();
-
-            if (p.y < lineHeight) // still on current line
+            for (int i = 0; i < target.getComponentCount(); i++)
             {
-                p.y = lineStart;
-                lineHeight = Math.max(lineHeight, lineStart + d.height);
-            }
-            else  // start a new line
-            {
-                lineStart = lineHeight + getVgap();
-                p.y = lineStart;
-                lineHeight = lineStart + d.height;
-            }
+                c = target.getComponent(i);
 
-            p.y = lineStart;
-            c.setLocation(p);
+                Point p = c.getLocation();
+                Dimension d = c.getSize();
+
+                if (p.y < lineHeight) // still on current line
+                {
+                    p.y = lineStart;
+                    lineHeight = Math.max(lineHeight, lineStart + d.height);
+                }
+                else  // start a new line
+                {
+                    lineStart = lineHeight + getVgap();
+                    p.y = lineStart;
+                    lineHeight = lineStart + d.height;
+                }
+
+                p.y = lineStart;
+                c.setLocation(p);
+            }
         }
     }
 

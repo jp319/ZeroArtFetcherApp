@@ -30,7 +30,7 @@ public class TestMainMethods {
                 new ZerochanSearcherOnline(
                         "Genshin+Impact",
                         "Strict")
-                        .getThumbnails();
+                        .getItemListFromTagSearch();
 
         // Now you can work with the individual ZerochanItem objects
         for (ZerochanItem item : items) {

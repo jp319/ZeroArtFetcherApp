@@ -1,9 +1,14 @@
 package com.jp319.ZeroArtFetcher.views.components;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
+import com.jp319.ZeroArtFetcher.views.callbacks.ZeroArtFetcherLayoutToHeaderCallback;
+import com.jp319.ZeroArtFetcher.views.listeners.frameComponentListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class ZeroArtFetcherLayout extends JFrame {
     public static void main(String[] args) {
@@ -17,8 +22,9 @@ public class ZeroArtFetcherLayout extends JFrame {
         initializeFrame();
         initializeFrameContainer();
         // Add Components here
-        initializeHeader();
         initializeBody();
+        initializeHeader();
+        initializeCallbacks();
         // Add Components here
         pack();
         centerFrameOnScreen();
@@ -27,6 +33,7 @@ public class ZeroArtFetcherLayout extends JFrame {
     private Container frameContainer;
     private ZeroArtFetcherHeader headerPanel;
     private ZeroArtFetcherBody bodyPanel;
+    private ZeroArtFetcherLayoutToHeaderCallback callback;
     // Set up the whole frame
     private void initializeFrame() {
         setTitle("ZeroArtFetcher");
@@ -49,11 +56,17 @@ public class ZeroArtFetcherLayout extends JFrame {
     // Set up Components
     // Header
     private void initializeHeader() {
-        headerPanel = new ZeroArtFetcherHeader();
+        headerPanel = new ZeroArtFetcherHeader(bodyPanel);
         frameContainer.add(headerPanel, BorderLayout.NORTH);
     }
     private void initializeBody() {
         bodyPanel = new ZeroArtFetcherBody();
         frameContainer.add(bodyPanel, BorderLayout.CENTER);
+    }
+    private void initializeCallbacks() {
+        callback = headerPanel;
+        ComponentListener frameComponentListener =
+                new frameComponentListener(this, callback);
+        addComponentListener(frameComponentListener);
     }
 }

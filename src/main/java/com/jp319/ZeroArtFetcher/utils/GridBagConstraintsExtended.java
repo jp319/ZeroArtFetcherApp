@@ -2,8 +2,8 @@ package com.jp319.ZeroArtFetcher.utils;
 
 import java.awt.*;
 
-public class GridBagConstraints extends java.awt.GridBagConstraints {
-    public GridBagConstraints(int x, int y, int width, double weightX, int anchor, int fill) {
+public class GridBagConstraintsExtended extends java.awt.GridBagConstraints {
+    public GridBagConstraintsExtended(int x, int y, int width, double weightX, int anchor, int fill) {
         this.gridx = x;
         this.gridy = y;
         this.gridwidth = width;

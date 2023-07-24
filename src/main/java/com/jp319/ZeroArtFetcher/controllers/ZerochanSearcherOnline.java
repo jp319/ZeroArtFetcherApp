@@ -63,7 +63,15 @@ public class ZerochanSearcherOnline {
         return zerochanItem.getFull();
     }
     //TODO: Make methods for getting multiple image thumbnail
-    public List<ZerochanItem> getThumbnails() throws IOException, InterruptedException {
+    public String[] getThumbnails() throws IOException, InterruptedException {
+        List<ZerochanItem> items = getItemListFromTagSearch();
+        String[] thumbnails = new String[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            thumbnails[i] = items.get(i).getThumbnail();
+        }
+        return thumbnails;
+    }
+    public List<ZerochanItem> getItemListFromTagSearch() throws IOException, InterruptedException {
         HttpRequest request = buildApiRequestForMultipleItems(commaSeperatedTags, andSeperatedFilters);
         HttpResponse<String> response = sendApiRequest(request);
         ZerochanItems zerochanItems = parseApiResponseForMultipleItems(new ZerochanResponseParser().getParsedJson(response.body()));
