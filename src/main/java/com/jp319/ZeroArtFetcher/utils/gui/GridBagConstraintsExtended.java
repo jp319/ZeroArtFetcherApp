@@ -1,4 +1,4 @@
-package com.jp319.ZeroArtFetcher.utils;
+package com.jp319.ZeroArtFetcher.utils.gui;
 
 import java.awt.*;
 

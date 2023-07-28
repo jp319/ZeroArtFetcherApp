@@ -6,7 +6,7 @@ import com.jp319.ZeroArtFetcher.models.ZerochanItem;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 //        // Retrieving an individual image
 //        System.out.println("Individual Image Retriever Test");
 //         System.out.println("Image: " + getImage("3662015"));
@@ -29,35 +29,35 @@ public class Main {
 //                        "Filter(s) = "+filters+"\n" +
 //                        getThumbnails(tags, filters) +
 //                        "=====================================");
-        String[] thumbnails = new ZerochanSearcherOnline( "Lumine,Flower", "Strict&p=2&l=200").getThumbnails();
-        for (String thumbnail : thumbnails) {
-            System.out.println(thumbnail);
-        }
+		String[] thumbnails = new ZerochanSearcherOnline( "Ecchi", "Strict&p=2&l=200").getThumbnails();
+		for (String thumbnail : thumbnails) {
+			System.out.println(thumbnail);
+		}
 
-    }
-    // Working
-    private static String getImage (String id) {
-        ZerochanSearcherOnline zerochanSearcherOnline = new ZerochanSearcherOnline(id);
-        try {
-            return zerochanSearcherOnline.getImg();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    // Working
-    private static String getThumbnails (String tags, String filters) {
-        ZerochanSearcherOnline zerochanSearcherOnline = new ZerochanSearcherOnline(tags, filters);
-        StringBuilder thumbnails = new StringBuilder();
-        int count = 1;
-        try {
-            for (ZerochanItem thumbnail : zerochanSearcherOnline.getItemListFromTagSearch()) {
-                thumbnails.append("Thumbnail (").append(count++).append("):");
-                thumbnails.append(thumbnail.getThumbnail()).append(",\n");
-            }
-            thumbnails.deleteCharAt(thumbnails.length() - 2);
-            return thumbnails.toString();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	}
+	// Working
+	private static String getImage (String id) {
+		ZerochanSearcherOnline zerochanSearcherOnline = new ZerochanSearcherOnline(id);
+		try {
+			return zerochanSearcherOnline.getImg();
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	// Working
+	private static String getThumbnails (String tags, String filters) {
+		ZerochanSearcherOnline zerochanSearcherOnline = new ZerochanSearcherOnline(tags, filters);
+		StringBuilder thumbnails = new StringBuilder();
+		int count = 1;
+		try {
+			for (ZerochanItem thumbnail : zerochanSearcherOnline.getItemListFromTagSearch()) {
+				thumbnails.append("Thumbnail (").append(count++).append("):");
+				thumbnails.append(thumbnail.getThumbnail()).append(",\n");
+			}
+			thumbnails.deleteCharAt(thumbnails.length() - 2);
+			return thumbnails.toString();
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
