@@ -83,34 +83,38 @@ public class ZerochanSearcherOnlineV2 implements Closeable {
 	// Public Method used for ZerochanResponseParser
 	public List<ZerochanItem> getItemListFromTagSearch() throws IOException {
 		String response = getJsonContent();
+		System.out.println("Response: " + response);
 		System.out.println("Is Valid Json: " + ValidateZerochanItems.isValidJson(response));
-		if (!ValidateZerochanItems.isValidJson(response)) {
-			if (ValidateZerochanItems.isSingleItem(response)) {
-				commaSeperatedTags = ValidateZerochanItems.scrapeJsonV2(
-						getCurrentLink(), getHttpGet(), httpClient, context
-				);
-				response = getJsonContent();
-			}
-		}
-		System.out.println("New Link: " + getCurrentLink());
-		//System.out.println("Response: " + response);
-		
-		ZerochanItems zerochanItems;
-		
-		System.out.println("Is single Item: "+ ValidateZerochanItems.isSingleItem(response));
-		
-		if (ValidateZerochanItems.isSingleItem(response)) {
-			zerochanItems = new ZerochanItems();
-			ZerochanItem item = parseApiResponseForSingleItem(response);
-			zerochanItems.setItems(new ArrayList<>());
-			zerochanItems.getItems().add(item);
+		if (response.contains("Page number too high, please filter results.")) {
+			return null;
 		} else {
-			zerochanItems = parseApiResponseForMultipleItems(
-					new ZerochanResponseParser()
-							.getParsedJson(response, commaSeperatedTags)
-			);
+			if (!ValidateZerochanItems.isValidJson(response)) {
+				if (ValidateZerochanItems.isSingleItem(response)) {
+					commaSeperatedTags = ValidateZerochanItems.scrapeJsonV2(
+							getCurrentLink(), getHttpGet(), httpClient, context
+					);
+					response = getJsonContent();
+				}
+			}
+			System.out.println("New Link: " + getCurrentLink());
+			
+			ZerochanItems zerochanItems;
+			
+			System.out.println("Is single Item: "+ ValidateZerochanItems.isSingleItem(response));
+			
+			if (ValidateZerochanItems.isSingleItem(response)) {
+				zerochanItems = new ZerochanItems();
+				ZerochanItem item = parseApiResponseForSingleItem(response);
+				zerochanItems.setItems(new ArrayList<>());
+				zerochanItems.getItems().add(item);
+			} else {
+				zerochanItems = parseApiResponseForMultipleItems(
+						new ZerochanResponseParser()
+								.getParsedJson(response, commaSeperatedTags)
+				);
+			}
+			return zerochanItems.getItems();
 		}
-		return zerochanItems.getItems();
 	}
 	// Private Http Methods
 	private ZerochanItem parseApiResponseForSingleItem(String responseBody) {

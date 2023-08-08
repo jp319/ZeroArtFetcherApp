@@ -51,6 +51,7 @@ public class HttpClientExampleV2 {
 			HttpEntity entity = response.getEntity();
 			
 			System.out.println("Response code: "+ response.getStatusLine().getStatusCode());
+			System.out.println(response.getFirstHeader("Content-Encoding").getValue());
 			//System.out.println(Arrays.toString(response.getAllHeaders()));
 			
 			// Read the response content

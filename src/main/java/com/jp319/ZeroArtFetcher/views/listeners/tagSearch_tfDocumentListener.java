@@ -31,5 +31,8 @@ public class tagSearch_tfDocumentListener implements DocumentListener {
 	private void updateIdSearch_tfStatus() {
 		boolean hasText = tagSearch_tf.getText().trim().length() > 0;
 		idSearch_tf.setEnabled(!hasText);
+		
+		tagSearch_tf.revalidate();
+		tagSearch_tf.repaint();
 	}
 }

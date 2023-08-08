@@ -3,13 +3,13 @@ package com.jp319.ZeroArtFetcher.views.components;
 import com.jp319.ZeroArtFetcher.controllers.ZerochanSearcherOnline;
 import com.jp319.ZeroArtFetcher.controllers.ZerochanSearcherOnlineV2;
 import com.jp319.ZeroArtFetcher.utils.*;
-import com.jp319.ZeroArtFetcher.utils.gui.JRadioButtonExtended;
 import com.jp319.ZeroArtFetcher.utils.gui.LazyOnlineImageLoader;
 import com.jp319.ZeroArtFetcher.utils.gui.ShakeFrame;
 import com.jp319.ZeroArtFetcher.utils.gui.WrapLayout;
 import com.jp319.ZeroArtFetcher.utils.other.FilterManager;
-import com.jp319.ZeroArtFetcher.utils.other.PreviousSearch;
+import com.jp319.ZeroArtFetcher.utils.other.SearchConstants;
 import com.jp319.ZeroArtFetcher.utils.other.StringArrayCheck;
+import com.jp319.ZeroArtFetcher.utils.other.WebsiteConnectivityChecker;
 import com.jp319.ZeroArtFetcher.views.callbacks.ZeroArtFetcherHeaderToBodyCallback;
 
 import javax.swing.*;
@@ -32,6 +32,7 @@ public class ZeroArtFetcherBody
 	//private JProgressBar progressBar;
 	private ZeroArtFetcherFooter footerPanel;
 	private JFrame mainFrame;
+	private ExecutorService service;
 
 	private void initializeBodyPanel(ZeroArtFetcherFooter footerPanel, JFrame mainFrame) {
 		this.footerPanel = footerPanel;
@@ -93,12 +94,17 @@ public class ZeroArtFetcherBody
 		}
 	}
 	private void loadOnlineImages(String[] images, int maxWidth, int maxHeight) {
+		// Cancel previous tasks and create a new ExecutorService
+		if (service != null) {
+			service.shutdownNow();
+		}
+		
 		imagesPanel.removeAll();
 		imagesPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
 		footerPanel.setTotalItems(images.length);
 
 		int processors = Runtime.getRuntime().availableProcessors();
-		ExecutorService service = Executors.newFixedThreadPool(processors - 2);
+		service = Executors.newFixedThreadPool(processors - 2);
 		System.out.println("Number of processors: "+processors);
 
 		for (String image : images) {
@@ -108,10 +114,11 @@ public class ZeroArtFetcherBody
 		}
 
 		service.shutdown();
-
-		// Repaint the panel to show the initial placeholders for the images
-		imagesPanel.revalidate();
-		imagesPanel.repaint();
+		SwingUtilities.invokeLater(()->{
+			// Repaint the panel to show the initial placeholders for the images
+			imagesPanel.revalidate();
+			imagesPanel.repaint();
+		});
 	}
 	private void loadOfflineImages(String[] images, int maxWidth, int maxHeight) {
 		for (String image : images) {
@@ -143,31 +150,41 @@ public class ZeroArtFetcherBody
 //						tagStr,
 //						FilterManager.getConcatenatedFilters()
 //				);
-		System.out.println("Filter used: " + FilterManager.getConcatenatedFilters());
-		try (ZerochanSearcherOnlineV2 zerochanSearcherOnlineV2 =
-					 new ZerochanSearcherOnlineV2(tagStr, FilterManager.getConcatenatedFilters())) {
-			
-			PreviousSearch.PreviousSearchedString = tagStr;
-			
-			String[] images = zerochanSearcherOnlineV2.getThumbnails();
-			loadImagesToImagePanel(images, true, "No results found for this Tag Search...");
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		if (WebsiteConnectivityChecker.isWebsiteReachable()) {
+			System.out.println("Filter used: " + FilterManager.getConcatenatedFilters());
+			try (ZerochanSearcherOnlineV2 zerochanSearcherOnlineV2 =
+						 new ZerochanSearcherOnlineV2(tagStr, FilterManager.getConcatenatedFilters())) {
+				
+				SearchConstants.PreviousSearchedString = tagStr;
+				
+				String[] images = zerochanSearcherOnlineV2.getThumbnails();
+				loadImagesToImagePanel(images, true, "No results found for this Tag Search...");
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			System.out.println("Tag(s) used: " + tagStr);
+		} else {
+			loadImagesToImagePanel(null, true, "No internet connection...");
 		}
-		System.out.println("Tag(s) used: " + tagStr);
 	}
 	@Override
 	public void idSearchEnteredOnline(String idStr) {
-		zerochanSearcherOnline = new ZerochanSearcherOnline(idStr);
-		String[] image = new String[1];
-		try {
-			image[0] = zerochanSearcherOnline.getImg();
-		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException(e);
+		if (WebsiteConnectivityChecker.isWebsiteReachable()) {
+			System.out.println("Filter used: " + FilterManager.getConcatenatedFilters());
+			try (ZerochanSearcherOnlineV2 zerochanSearcherOnlineV2 =
+						 new ZerochanSearcherOnlineV2(idStr)) {
+				
+				SearchConstants.PreviousSearchedString = idStr;
+				
+				String[] images = zerochanSearcherOnlineV2.getThumbnails();
+				loadImagesToImagePanel(images, true, "No results found for this ID Search...");
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			System.out.println("ID used: " + idStr);
+		} else {
+			loadImagesToImagePanel(null, true, "No internet connection...");
 		}
-		loadImagesToImagePanel(image, true, "No results found for this ID Search...");
-		System.out.println(image[0]);
-		System.out.println(idStr);
 	}
 	@Override
 	public void filterSelected(String tagStr) {

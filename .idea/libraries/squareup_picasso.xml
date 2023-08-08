@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="squareup.picasso" type="repository">
+    <properties maven-id="com.squareup.picasso:picasso:2.5.2" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/picasso-2.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

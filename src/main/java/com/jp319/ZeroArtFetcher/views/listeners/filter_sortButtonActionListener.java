@@ -2,7 +2,7 @@ package com.jp319.ZeroArtFetcher.views.listeners;
 
 import com.jp319.ZeroArtFetcher.utils.gui.JRadioButtonExtended;
 import com.jp319.ZeroArtFetcher.utils.other.FilterManager;
-import com.jp319.ZeroArtFetcher.utils.other.PreviousSearch;
+import com.jp319.ZeroArtFetcher.utils.other.SearchConstants;
 import com.jp319.ZeroArtFetcher.views.callbacks.ZeroArtFetcherHeaderToBodyCallback;
 
 import javax.swing.*;
@@ -28,11 +28,10 @@ public class filter_sortButtonActionListener implements ActionListener {
 			if (!tagStr.getText().isEmpty()) {
 				callback.filterSelected(tagStr.getText().trim());
 			} else {
-				if (!PreviousSearch.PreviousSearchedString.isEmpty()) {
-					callback.filterSelected(PreviousSearch.PreviousSearchedString);
+				if (!SearchConstants.PreviousSearchedString.isEmpty()) {
+					callback.filterSelected(SearchConstants.PreviousSearchedString);
 				}
 			}
-			System.out.println("Filter check from action listener: " + FilterManager.getConcatenatedFilters());
 		}).start(); // Start the thread's execution
 	}
 	

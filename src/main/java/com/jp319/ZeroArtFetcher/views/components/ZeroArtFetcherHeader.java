@@ -30,14 +30,21 @@ public class ZeroArtFetcherHeader
 	private final JRadioButtonExtended[] sortRadioButtonArray = new JRadioButtonExtended[3];
 	private final int totalSortButtons = sortRadioButtonArray.length - 1;
 	private int selectedSortButton = totalSortButtons;
-	private final JCheckBox strictMode = new JCheckBox("Strict Mode");
 	JPanel filterPanel = new JPanel(new WrapLayout(FlowLayout.RIGHT));
 	private final ButtonGroup filterButtonGroup = new ButtonGroup();
 	private final JRadioButtonExtended[] filterRadioButtonArray = new JRadioButtonExtended[7];
 	private final int totalFilterButtons = filterRadioButtonArray.length - 1;
 	private int selectedFilterButton = totalFilterButtons;
+	JPanel optionsPanel = new JPanel();
+	private final JRadioButtonExtended strictMode = new JRadioButtonExtended("Strict Mode","&strict");
+	private final JSpinner entryLimit = new JSpinner(new SpinnerNumberModel(1, 1, 200, 1));
+	private final JSpinner.NumberEditor editor = (JSpinner.NumberEditor) entryLimit.getEditor();
+	private final JTextField colorFilter = new JTextField();
+	private final String[] options = {"All Time", "Last 7000 Entries", "Last 15000 Entries"};
+	private final JComboBox<String> popularityButton = new JComboBox<>(options);
 	private final JButton filterDropdown = new JButton("Filters ｜▼");
 	private final JPopupMenu filterPopup = new JPopupMenu();
+	private final JButton applyFilter = new JButton("Apply Additional Filters");
 	private final JButton showSavedImagesBtn = new JButton("Saved Images");
 	public ZeroArtFetcherHeader(ZeroArtFetcherHeaderToBodyCallback callback) {
 		this.headerToBodyCallback = callback;
@@ -74,11 +81,16 @@ public class ZeroArtFetcherHeader
 		idSearch_tf.putClientProperty("JTextField.trailingComponent", idSearchBtn);
 		idSearch_tf.putClientProperty("JComponent.roundRect", true);
 		idSearch_tf.putClientProperty("JTextField.placeholderText", "3793685");
+		idSearch_tf.setPreferredSize(new Dimension(
+				70,idSearch_tf.getPreferredSize().height
+		));
+		
 		tagSearch_tf.putClientProperty("JTextField.trailingComponent", tagSearchBtn);
-		tagSearch_tf.putClientProperty("JTextField.padding", new Insets(2,2,2,2));
 		tagSearch_tf.putClientProperty("JComponent.roundRect", true);
 		tagSearch_tf.putClientProperty("JTextField.placeholderText", "Genshin+Impact,Klee");
-		tagSearch_tf.putClientProperty("JTextField.padding", new Insets(2,2,2,2));
+		tagSearch_tf.setPreferredSize(new Dimension(
+				70,tagSearch_tf.getPreferredSize().height
+		));
 
 		// Sort Button Group
 		// Is initialized in method initializeRadioButtons
@@ -111,12 +123,8 @@ public class ZeroArtFetcherHeader
 				GridBagConstraintsExtended.HORIZONTAL
 		));
 		initializeGroupedButtons();
-		add(strictMode, new GridBagConstraintsExtended(
-				0,3,8,1.0,
-				GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL
-		));
-		add(showSavedImagesBtn, new GridBagConstraintsExtended(
+		initializeOptions();
+		add(applyFilter, new GridBagConstraintsExtended(
 				0,4,8,1,
 				GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL
@@ -144,7 +152,7 @@ public class ZeroArtFetcherHeader
 	}
 	private void initializeGroupedButtons() {
 		add(sortPanel, new GridBagConstraintsExtended(
-				0,2,4, 0.0,
+				0,2,5, 0.0,
 				GridBagConstraintsExtended.WEST,
 				GridBagConstraintsExtended.HORIZONTAL
 		));
@@ -174,6 +182,14 @@ public class ZeroArtFetcherHeader
 		// Action Listeners
 		setupRadioButtons(totalFilterButtons, filterButtonGroup, filterRadioButtonArray, filterPanel);
 		setupRadioButtons(totalSortButtons, sortButtonGroup, sortRadioButtonArray, sortPanel);
+		
+		popularityButton.setPreferredSize(new Dimension(
+				25,
+				popularityButton.getPreferredSize().height
+		));
+		popularityButton.setEnabled(false);
+		
+		sortPanel.add(popularityButton);
 	}
 	private void setupRadioButtons(int totalButtons, ButtonGroup buttonGroup,
 								   JRadioButtonExtended[] radioButtonArray,
@@ -190,14 +206,11 @@ public class ZeroArtFetcherHeader
 			}
 		}
 	}
-	
 	private void showFilterButtons() {
 		filterPanel.removeAll();
-		
 		for (int i = 0; i <= 5; i++ ) {
 			filterPanel.add(filterRadioButtonArray[i]);
 		}
-		
 		filterPanel.revalidate();
 		filterPanel.repaint();
 	}
@@ -233,7 +246,34 @@ public class ZeroArtFetcherHeader
 			filterPanel.repaint();
 		});
 	}
-
+	private void initializeOptions() {
+		SwingUtilities.invokeLater(()-> {
+			optionsPanel.setLayout(new BorderLayout());
+			optionsPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY,1));
+			JPanel optionHolder = new JPanel();
+			
+			strictMode.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
+			editor.getTextField().setHorizontalAlignment(JTextField.CENTER);
+			JLabel entryLimitLabel = new JLabel("No. of Entries");
+			colorFilter.putClientProperty("JComponent.roundRect", true);
+			colorFilter.putClientProperty("JTextField.placeholderText", "Color");
+			applyFilter.putClientProperty("JComponent.roundRect", true);
+			
+			optionHolder.add(strictMode);
+			optionHolder.add(colorFilter);
+			optionHolder.add(entryLimit);
+			optionHolder.add(entryLimitLabel);
+			optionsPanel.add(optionHolder, BorderLayout.CENTER);
+			
+			add(optionsPanel, new GridBagConstraintsExtended(
+					0, 3, 8, 1.0,
+					GridBagConstraints.CENTER,
+					GridBagConstraints.HORIZONTAL
+			));
+			revalidate();
+			repaint();
+		});
+	}
 	private static Icon createSearchIcon() {
 		// Replace this URL with the actual URL of your search icon image
 		File image = new File("src/main/resources/images/search-regular-240.png");
@@ -261,11 +301,17 @@ public class ZeroArtFetcherHeader
 					}
 					selectedSortButton = x;
 					FilterManager.setFilter(sortRadioButtonArray[selectedSortButton].getValue());
+					if (sortRadioButtonArray[selectedSortButton].getValue().equals("s=fav&")) {
+						popularityButton.setEnabled(true); // Sets Popularity button
+					}
 				} else {
 					// Deselect the current sorting option and remove it from filters
 					sortRadioButtonArray[totalSortButtons].setSelected(true);
 					if (selectedSortButton != totalSortButtons) {
 						FilterManager.unsetFilter(sortRadioButtonArray[selectedSortButton].getValue());
+						if (sortRadioButtonArray[selectedSortButton].getValue().equals("s=fav&")) {
+							popularityButton.setEnabled(false); // Sets Popularity button
+						}
 					}
 					selectedSortButton = totalSortButtons;
 				}

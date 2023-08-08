@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ZeroArtFetcherFooter extends JPanel {
 	private final JProgressBar progressBar;
-	private JLabel downloadRatio = new JLabel("0/0");
+	private final JLabel downloadRatio = new JLabel("0/0");
 	private int totalItems;
 	private int loadedItem = 0;
 	public ZeroArtFetcherFooter(JProgressBar progressBar) {
